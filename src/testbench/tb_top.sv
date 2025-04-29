@@ -8,6 +8,8 @@ module tb_top;
   logic push_button, infravermelho;
   logic led, saida;
 
+  tb_utils utils();
+
   // Instanciação do módulo top
   top uut (
     .clk(top.clk),
