@@ -4,8 +4,8 @@ module controladora #(
     parameter AUTO_SHUTDOWN_T = 30000 // Tempo de desligamento automático (em ms)
 ) (
     input wire clk, rst,
-    input logic inframervelho, push_button,
-    output logic led, saida 
+    input logic infravermelho, push_button,
+    output logic led, saida
 );
 
 endmodule;

@@ -10,12 +10,12 @@ module tb_top;
 
   // Instanciação do módulo top
   top uut (
-    .clk(clk),
-    .rst(rst),
-    .push_button(push_button),
-    .infravermelho(infravermelho),
-    .led(led),
-    .saida(saida)
+    .clk(top.clk),
+    .rst(top.rst),
+    .push_button(top.push_button),
+    .infravermelho(top.infravermelho),
+    .led(top.led),
+    .saida(top.saida)
   );
 
   // Clock generation
