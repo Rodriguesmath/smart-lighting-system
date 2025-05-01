@@ -4,9 +4,12 @@ module top #(
   parameter AUTO_SHUTDOWN_T = 30000
 ) (
   // Inputs and Outputs
-  logic clk, rst,
-  logic push_button, infravermelho,
-  logic led, saida
+  input wire clk,               // Clock como entrada
+  input wire rst,               // Reset como entrada
+  input wire push_button,       // Botão como entrada
+  input wire infravermelho,     // Sinal de infravermelho como entrada
+  output wire led,              // LED como saída
+  output wire saida  
 );
   // Instanciação do módulo controladora
   controladora #(
