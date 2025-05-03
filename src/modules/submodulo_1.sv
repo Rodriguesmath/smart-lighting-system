@@ -37,8 +37,8 @@ always_comb begin
       led = 0;
       saida = 1; 
       if (a) next_state = LAMPADA_LIG_MANUAL; // Alterna para modo manual
-      else if (c) next_state = LAMPADA_DESLIG_AUTOMATICA; 
-      else if (d) next_state = LAMPADA_LIG_AUTOMATICA;
+      if (c) next_state = LAMPADA_DESLIG_AUTOMATICA; 
+      if (d) next_state = LAMPADA_LIG_AUTOMATICA;
     end
 
     // Estado: Lâmpada desligada no modo manual
