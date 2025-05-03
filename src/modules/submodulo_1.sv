@@ -21,13 +21,16 @@ always_ff @(posedge clk or posedge rst) begin
 end
 
 always_comb begin
- 
+  // Inicializa os sinais de saída e o próximo estado
+  next_state = current_state;
+  led = 0;
+  saida = 0;
 
   case (current_state)
     // Estado: Lâmpada desligada no modo automático
     LAMPADA_DESLIG_AUTOMATICA: begin
       led = 0;
-      saida = 0; 
+      saida = 0;
       if (a) next_state = LAMPADA_DESLIG_MANUAL; // Alterna para modo manual
       else if (d) next_state = LAMPADA_LIG_AUTOMATICA; // Liga a lâmpada no modo automático
     end
@@ -35,16 +38,15 @@ always_comb begin
     // Estado: Lâmpada ligada no modo automático
     LAMPADA_LIG_AUTOMATICA: begin
       led = 0;
-      saida = 1; 
+      saida = 1;
       if (a) next_state = LAMPADA_LIG_MANUAL; // Alterna para modo manual
-      if (c) next_state = LAMPADA_DESLIG_AUTOMATICA; 
-      if (d) next_state = LAMPADA_LIG_AUTOMATICA;
+      else if (c) next_state = LAMPADA_DESLIG_AUTOMATICA; // Desliga a lâmpada no modo automático
     end
 
     // Estado: Lâmpada desligada no modo manual
     LAMPADA_DESLIG_MANUAL: begin
       led = 1; // Indica modo manual
-      saida = 0; // Lâmpada desligada
+      saida = 0; // Lâmpada desligada 
       if (a) next_state = LAMPADA_DESLIG_AUTOMATICA; // Alterna para modo automático
       else if (b) next_state = LAMPADA_LIG_MANUAL; // Liga a lâmpada no modo manual
     end
@@ -53,13 +55,14 @@ always_comb begin
     LAMPADA_LIG_MANUAL: begin
       led = 1; // Indica modo manual
       saida = 1; // Lâmpada ligada
-      if (b) next_state = LAMPADA_DESLIG_MANUAL; // Desliga a lâmpada no modo manual
+      if (a) next_state = LAMPADA_LIG_AUTOMATICA; // Alterna para modo automático
+      else if (b) next_state = LAMPADA_DESLIG_MANUAL; // Desliga a lâmpada no modo manual
     end
 
     default: begin
-      led = 0;
       next_state = LAMPADA_DESLIG_AUTOMATICA;
-      saida = 0; // Garante que a saída seja 0 no estado padrão
+      led = 0;
+      saida = 0;
     end
   endcase
 end
