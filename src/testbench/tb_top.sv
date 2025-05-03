@@ -1,16 +1,13 @@
 module tb_top;
 
   // Parameters
-  parameter CLK_PERIOD = 10;
+  parameter CLK_PERIOD = 2; // Clock com período de 2 unidades de tempo
 
   // Signals
   logic clk, rst;
   logic push_button, infravermelho;
   logic led, saida;
 
-  tb_utils utils();
-
-  // Instanciação do módulo top
   // Instanciação do módulo top
   top uut (
     .clk(clk),
@@ -21,40 +18,49 @@ module tb_top;
     .saida(saida)
   );
 
-  // Clock generation
+  // Geração do clock
+  always begin
+    #1 clk = ~clk; // Clock com período de 2 unidades de tempo
+  end
+
+  // Dump de waveform
+  initial begin
+    $dumpfile("tb.vcd");
+    $dumpvars(1, tb_top);
+  end
+
+  // Geração do reset
   initial begin
     clk = 0;
-    forever #(CLK_PERIOD / 2) clk = ~clk;
+    rst = 1; // Ativa o reset
+    #5 rst = 0; // Libera o reset
   end
 
-  // Reset generation
+  // Estímulos para o sistema
   initial begin
-    rst = 0;
-    #20;
-    rst = 1;
-  end
-
-  // Stimulus generation
-  initial begin
+    // Inicializa os sinais
     push_button = 0;
     infravermelho = 0;
 
-    // Simulação do modo automático
-    #30;
-    infravermelho = 1; // Movimento detectado
-    #50;
-    infravermelho = 0; // Sem movimento
-    #30000; // Aguarda o tempo de desligamento automático
+    // Teste: Alternância para modo manual
+    #10 push_button = 1; // Pressiona o botão por 6 unidades de tempo
+    #6 push_button = 0;  // Solta o botão
 
-    // Simulação do modo manual
-    #50;
-    push_button = 1; // Pressiona o botão
-    #5000;
-    push_button = 0; // Solta o botão
+    // Teste: Controle manual da lâmpada
+    #15 push_button = 1; // Pressiona o botão por 1 unidade de tempo
+    #1 push_button = 0;  // Solta o botão
+
+    // Teste: Modo automático com movimento
+    #20 infravermelho = 1; // Movimento detectado
+    #5 infravermelho = 0;  // Sem movimento
+    #30; // Aguarda o tempo de desligamento automático
+
+    // Teste: Alternância de volta para modo automático
+    #10 push_button = 1; // Pressiona o botão por 6 unidades de tempo
+    #6 push_button = 0;  // Solta o botão
 
     // Finaliza a simulação
-    #100;
-    $finish;
+    #20 $finish;
   end
 
   // Monitoramento
