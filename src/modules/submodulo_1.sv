@@ -12,6 +12,7 @@ typedef enum logic [2:0] {
 
 state_t current_state, next_state;
 
+
 always_ff @(posedge clk or posedge rst) begin
   if (rst) begin
     current_state <= LAMPADA_DESLIG_AUTOMATICA;
@@ -20,47 +21,55 @@ always_ff @(posedge clk or posedge rst) begin
   end
 end
 
+always_ff @(posedge clk or posedge rst) begin
+  if (rst) begin
+    next_state <= LAMPADA_DESLIG_AUTOMATICA;
+  end else begin
+    case (current_state)
+      LAMPADA_DESLIG_AUTOMATICA: begin
+        if (a) next_state <= LAMPADA_DESLIG_MANUAL; // Alterna para modo manual
+        else if (d) next_state <= LAMPADA_LIG_AUTOMATICA; // Liga a lâmpada no modo automático
+      end
+      LAMPADA_LIG_AUTOMATICA: begin
+        if (a) next_state <= LAMPADA_LIG_MANUAL; // Alterna para modo manual
+        else if (c) next_state <= LAMPADA_DESLIG_AUTOMATICA; // Desliga a lâmpada no modo automático
+      end
+      LAMPADA_DESLIG_MANUAL: begin
+        if (a) next_state <= LAMPADA_DESLIG_AUTOMATICA; // Alterna para modo automático
+        else if (b) next_state <= LAMPADA_LIG_MANUAL; // Liga a lâmpada no modo manual
+      end
+      LAMPADA_LIG_MANUAL: begin
+        if (a) next_state <= LAMPADA_LIG_AUTOMATICA; // Alterna para modo automático
+        else if (b) next_state <= LAMPADA_DESLIG_MANUAL; // Desliga a lâmpada no modo manual
+      end
+      default: begin
+        next_state <= LAMPADA_DESLIG_AUTOMATICA;
+      end
+    endcase
+  end
+end
+
 always_comb begin
-  // Inicializa os sinais de saída e o próximo estado
-  next_state = current_state;
-  led = 0;
-  saida = 0;
 
+  // Define os valores das saídas com base no estado atual
   case (current_state)
-    // Estado: Lâmpada desligada no modo automático
     LAMPADA_DESLIG_AUTOMATICA: begin
-      led = 0;
-      saida = 0;
-      if (a) next_state = LAMPADA_DESLIG_MANUAL; // Alterna para modo manual
-      else if (d) next_state = LAMPADA_LIG_AUTOMATICA; // Liga a lâmpada no modo automático
+      led = 0;   
+      saida = 0; 
     end
-
-    // Estado: Lâmpada ligada no modo automático
     LAMPADA_LIG_AUTOMATICA: begin
       led = 0;
       saida = 1;
-      if (a) next_state = LAMPADA_LIG_MANUAL; // Alterna para modo manual
-      else if (c) next_state = LAMPADA_DESLIG_AUTOMATICA; // Desliga a lâmpada no modo automático
     end
-
-    // Estado: Lâmpada desligada no modo manual
     LAMPADA_DESLIG_MANUAL: begin
-      led = 1; // Indica modo manual
-      saida = 0; // Lâmpada desligada 
-      if (a) next_state = LAMPADA_DESLIG_AUTOMATICA; // Alterna para modo automático
-      else if (b) next_state = LAMPADA_LIG_MANUAL; // Liga a lâmpada no modo manual
+      led = 1;
+      saida = 0;
     end
-
-    // Estado: Lâmpada ligada no modo manual
     LAMPADA_LIG_MANUAL: begin
-      led = 1; // Indica modo manual
-      saida = 1; // Lâmpada ligada
-      if (a) next_state = LAMPADA_LIG_AUTOMATICA; // Alterna para modo automático
-      else if (b) next_state = LAMPADA_DESLIG_MANUAL; // Desliga a lâmpada no modo manual
+      led = 1;
+      saida = 1;
     end
-
     default: begin
-      next_state = LAMPADA_DESLIG_AUTOMATICA;
       led = 0;
       saida = 0;
     end
