@@ -55,9 +55,11 @@ module submodulo_2 #(
       end
 
       DB: begin
-        if (Tp + 3 < DEBOUNCE_P) next_state <= DB;
-        else if (!push_button) next_state <= INICIAL;
-        else next_state <= B_STATE;
+        if (Tp + 3 < DEBOUNCE_P) next_state <= DB;// tp < 300
+        else if (!push_button) next_state <= INICIAL;//nPB
+        else next_state <= B_STATE;// tp >= 300
+      end
+
       end
 
       B_STATE: begin
