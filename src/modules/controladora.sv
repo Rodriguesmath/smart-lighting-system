@@ -11,20 +11,19 @@ module controladora #(
 
 // Sinais internos para comunicação entre os submódulos
 logic A, B, C;                         // Saídas dos submódulos
-logic a, b, c, d;                      // Entradas da máquina principal
-
 
 // Instância do submódulo 1 (máquina principal)
 submodulo_1 u_submodulo_1 (
   .clk(clk),
   .rst(rst),
-  .a(a),
-  .b(b),
-  .c(c),
-  .d(d),
+  .a(A),
+  .b(B),
+  .c(C),
+  .d(infravermelho),
   .led(led),
   .saida(saida)
 );
+
 // Instância do submódulo 2 (controle do botão)
 submodulo_2 #(
   .DEBOUNCE_P(DEBOUNCE_P),
@@ -46,13 +45,5 @@ submodulo_3 #(
   .infravermelho(infravermelho),
   .C(C)
 );
-
-// Conexão dos sinais para o submódulo 1
-assign a = A;                          // Sinal A do submódulo 2
-assign b = B;                          // Sinal B do submódulo 2
-assign c = C;                          // Sinal C do submódulo 3
-assign d = infravermelho;              // Sinal direto do infravermelho
-
-
 
 endmodule
