@@ -40,10 +40,10 @@ module submodulo_3 #(
       end else begin
         Tc <= 0; // Zera o contador em outros estados
       end
-      
+
     end
-    end:counter
-  
+  end:counter
+
 
   //aqui você lida em como a maquina faz as transições
   // Lógica de transição de estados

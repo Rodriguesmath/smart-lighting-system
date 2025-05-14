@@ -50,28 +50,28 @@ module submodulo_2 #(
       next_state <= INICIAL;
     end else case (current_state)
       INICIAL: begin
-        if (push_button) next_state <= DB;//PB
-        else next_state <= INICIAL;//nPB
-        end
+        if (push_button) next_state <= DB; //PB
+        else next_state <= INICIAL; //notPB
+      end
       DB: begin
-        if (Tp + 3 < DEBOUNCE_P) next_state <= DB;// tp < 300
-        else if (!push_button) next_state <= INICIAL;//notPB
-        else next_state <= B_STATE;// tp >= 300
+        if (Tp + 3 < DEBOUNCE_P) next_state <= DB; // tp < 300
+        else if (!push_button) next_state <= INICIAL; //notPB
+        else next_state <= B_STATE; // tp >= 300
       end
 
       B_STATE: begin
-        if (!push_button) next_state <= TEMP;//notPB
+        if (!push_button) next_state <= TEMP; //notPB
         else if (Tp + 2 >= SWITCH_MODE_MIN_T) next_state <= A_STATE; //tp >= 5000
         else next_state <= B_STATE; //tp < 5000
       end
 
       A_STATE: begin
-        if (!push_button) next_state <= TEMP;//notPB
+        if (!push_button) next_state <= TEMP; //notPB
         else next_state <= A_STATE; //tp >= 5000
       end
 
       TEMP: begin
-        next_state <= INICIAL;//clk
+        next_state <= INICIAL; //clk
       end
       default: begin
         next_state <= INICIAL; //clk
@@ -81,12 +81,11 @@ module submodulo_2 #(
   end:FSM
 
   always_comb begin:outputs
-    
+
     case (next_state)
       INICIAL: begin
         A = 0;
         B = 0;
-
         if(current_state == TEMP) begin
           A = A;
           B = B;
