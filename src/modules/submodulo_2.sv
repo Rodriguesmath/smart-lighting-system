@@ -45,7 +45,6 @@ module submodulo_2 #(
     end
   end:counter
 
-  // Lógica de transição de estados
   always_ff @(posedge clk or posedge rst) begin:FSM
     if (rst) begin
       next_state <= INICIAL;
@@ -88,7 +87,7 @@ module submodulo_2 #(
       INICIAL: begin
         A = 0;
         B = 0;
-        
+
         if(current_state == TEMP) begin
           A = A;
           B = B;

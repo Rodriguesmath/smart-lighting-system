@@ -78,8 +78,7 @@ module submodulo_3 #(
     end
   end:FSM
 
-  // Lógica do contador e sinal de saída
-  always_comb begin:FSM_comb
+  always_comb begin:outputs
     case (estado)
       INICIAL: begin
         C = 0;
@@ -98,6 +97,6 @@ module submodulo_3 #(
         C = 0;
       end
     endcase
-  end:FSM_comb
+  end:outputs
 
 endmodule
