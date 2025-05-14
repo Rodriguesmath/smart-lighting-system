@@ -50,34 +50,31 @@ module submodulo_2 #(
       next_state <= INICIAL;
     end else case (current_state)
       INICIAL: begin
-        if (push_button) next_state <= DB;
-        else next_state <= INICIAL;
-      end
-
+        if (push_button) next_state <= DB;//PB
+        else next_state <= INICIAL;//nPB
+        end
       DB: begin
         if (Tp + 3 < DEBOUNCE_P) next_state <= DB;// tp < 300
-        else if (!push_button) next_state <= INICIAL;//nPB
+        else if (!push_button) next_state <= INICIAL;//notPB
         else next_state <= B_STATE;// tp >= 300
       end
 
-      end
-
       B_STATE: begin
-        if (!push_button) next_state <= TEMP;
-        else if (Tp + 2 >= SWITCH_MODE_MIN_T) next_state <= A_STATE;
-        else next_state <= B_STATE;
+        if (!push_button) next_state <= TEMP;//notPB
+        else if (Tp + 2 >= SWITCH_MODE_MIN_T) next_state <= A_STATE; //tp >= 5000
+        else next_state <= B_STATE; //tp < 5000
       end
 
       A_STATE: begin
-        if (!push_button) next_state <= TEMP;
-        else next_state <= A_STATE;
+        if (!push_button) next_state <= TEMP;//notPB
+        else next_state <= A_STATE; //tp >= 5000
       end
 
       TEMP: begin
-        next_state <= INICIAL;
+        next_state <= INICIAL;//clk
       end
       default: begin
-        next_state <= INICIAL;
+        next_state <= INICIAL; //clk
       end
 
     endcase

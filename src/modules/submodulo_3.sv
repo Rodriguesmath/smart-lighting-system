@@ -56,20 +56,20 @@ module submodulo_3 #(
           if (infravermelho && C == 0) begin
             prox_estado <= INICIAL; // Permanece no estado INICIAL
           end else begin
-            prox_estado <= CONTANDO; // Transita para o estado CONTANDO
+            prox_estado <= CONTANDO; // !infra
           end
         end
         CONTANDO: begin
           if (infravermelho) begin
-            prox_estado <= INICIAL; // Retorna ao estado INICIAL
+            prox_estado <= INICIAL; //infra
           end else if (Tc == AUTO_SHUTDOWN_T) begin
-            prox_estado <= TEMP; // Transita para o estado TEMP
+            prox_estado <= TEMP; // Tc == 30000
           end else begin
-            prox_estado <= CONTANDO; // Permanece no estado CONTANDO
+            prox_estado <= CONTANDO; //ninfra
           end
         end
         TEMP: begin
-          prox_estado <= INICIAL; // Retorna ao estado INICIAL
+          prox_estado <= INICIAL; // clk
         end
         default: begin
           prox_estado <= INICIAL; // Estado padrão
