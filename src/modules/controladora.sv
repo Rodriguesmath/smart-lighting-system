@@ -11,6 +11,7 @@ module controladora #(
 
   // Sinais internos para comunicação entre os submódulos
   logic A, B, C; // Saídas dos submódulos
+  logic enable; // Sinal de habilitação
 
   // Instância do submódulo 1 (máquina principal)
   submodulo_1 u_submodulo_1 (
@@ -20,11 +21,12 @@ module controladora #(
     .b(B),
     .c(C),
     .d(infravermelho),
+    .enable(enable), 
     .led(led),
     .saida(saida)
   );
 
-  // Instância do submódulo 2 (controle do botão)
+  // Instância do submodulo 2 (controle do botão)
   submodulo_2 #(
     .DEBOUNCE_P(DEBOUNCE_P),
     .SWITCH_MODE_MIN_T(SWITCH_MODE_MIN_T)
@@ -43,6 +45,7 @@ module controladora #(
     .clk(clk),
     .rst(rst),
     .infravermelho(infravermelho),
+    .enable(enable), // Adiciona enable sempre ativo, ajuste conforme necessário
     .C(C)
   );
 

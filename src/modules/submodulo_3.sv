@@ -4,7 +4,9 @@ module submodulo_3 #(
   input logic clk,
   input logic rst,
   input logic infravermelho,
+  input logic enable,
   output logic C
+  
 );
 
   typedef enum logic [1:0] {
@@ -31,11 +33,11 @@ module submodulo_3 #(
       if (prox_estado == CONTANDO) begin
         if (infravermelho) begin
           Tc <= 0; // Reinicia se o infravermelho voltar
-        end else if (Tc < AUTO_SHUTDOWN_T - 1) begin
+        end else if ((Tc < AUTO_SHUTDOWN_T - 1) && enable) begin
           Tc <= Tc + 1; // Incrementa o contador
         end
         else begin
-          Tc <= 0;
+          Tc = 0;
         end
       end else begin
         Tc <= 0; // Zera o contador em outros estados
@@ -44,8 +46,6 @@ module submodulo_3 #(
     end
   end:counter
 
-
-  //aqui você lida em como a maquina faz as transições
   // Lógica de transição de estados
   always_ff @(posedge clk or posedge rst) begin:FSM
     if (rst) begin
